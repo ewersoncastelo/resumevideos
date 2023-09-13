@@ -1,19 +1,28 @@
-import { StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 import theme from "../../global/theme";
 
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.background,
-    width: "100%",
-    height: "100%",
+    flex: 1,
+  },
 
+  content: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
 
+  logoImage: {
+    width: 64,
+    height: 60.54,
+
+    marginBottom: 10,
+  },
+
   title: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontFamily: theme.fonts.regular,
+    color: theme.colors["primary-light"],
+    fontSize: 34,
+    fontFamily: theme.fonts.heading,
   },
 });

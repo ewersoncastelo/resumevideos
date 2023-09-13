@@ -13,7 +13,7 @@ export default {
   },
 
   fonts: {
-    regular: "Inter_400Regular",
-    bold: "Inter_700Bold",
+    input: "Roboto_400Regular",
+    heading: "Roboto_700Bold",
   },
-}
+};

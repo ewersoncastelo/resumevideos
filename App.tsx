@@ -1,32 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import { Fragment } from 'react';
-import { Home } from './src/screens/Home';
+import { StatusBar } from "expo-status-bar";
+import { Fragment } from "react";
+import { Home } from "./src/screens/Home";
 
-import * as SplashScreen from 'expo-splash-screen';
+import * as SplashScreen from "expo-splash-screen";
 
 import {
-  Inter_400Regular,
-  Inter_700Bold,
-  useFonts
-} from '@expo-google-fonts/inter';
+  Roboto_400Regular,
+  Roboto_700Bold,
+  useFonts,
+} from "@expo-google-fonts/roboto";
 
-SplashScreen.preventAutoHideAsync()
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   let [fontsLoaded, fontError] = useFonts({
-    Inter_400Regular,
-    Inter_700Bold
+    Roboto_400Regular,
+    Roboto_700Bold,
   });
 
   if (!fontsLoaded && !fontError) {
-    SplashScreen.hideAsync()
+    SplashScreen.hideAsync();
     return null;
   }
 
   return (
     <Fragment>
       <Home />
-      <StatusBar style='light' />
+      <StatusBar style="light" />
     </Fragment>
   );
 }
