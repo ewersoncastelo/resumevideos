@@ -7,7 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "server": "node --watch src/server/index.js"
+    "server": "env YTDL_NO_UPDATE=1 node --watch --no-warnings src/server/index.js"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.3",
