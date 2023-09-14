@@ -20,7 +20,7 @@ export function Home() {
             keyboardType="url"
           />
 
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={(e) => {}}>
             <Image
               source={iconPlus}
               style={styles.textButton}
