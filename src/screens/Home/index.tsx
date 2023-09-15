@@ -45,7 +45,13 @@ export function Home() {
 
     const transcription = await api.get("/summary/" + linkVideoID);
 
-    setMessage(transcription.data.result);
+    setMessage("Realizando o resumo. Aguarde...");
+
+    const summary = await api.post("/summary", {
+      text: transcription.data.result,
+    });
+
+    setMessage(summary.data.result);
     setNewVideo("");
   }
 
