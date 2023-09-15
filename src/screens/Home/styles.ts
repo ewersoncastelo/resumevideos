@@ -54,9 +54,27 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
   },
 
+  buttonResume: {
+    height: 16,
+    width: 16,
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    backgroundColor: theme.colors.danger,
+    borderRadius: 5,
+
+    marginLeft: 5,
+  },
+
   textButton: {
     width: 24,
     height: 24,
+  },
+
+  textButtonResume: {
+    width: 10,
+    height: 10,
   },
 
   subHeader: {
@@ -70,14 +88,14 @@ export const styles = StyleSheet.create({
     fontSize: 22,
 
     fontFamily: theme.fonts.heading,
-    marginTop: 20,
   },
 
   resultText: {
     color: theme.colors["text-secondary"],
     fontSize: 16,
 
-    marginTop: 18,
     textAlign: "justify",
+
+    marginBottom: 50,
   },
 });

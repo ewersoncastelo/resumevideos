@@ -18,8 +18,10 @@ export function Home() {
   const [_, setVideo] = useState<string>();
   const [newVideo, setNewVideo] = useState<string>("");
   const [message, setMessage] = useState<string>(
-    "Após enviar o link, o resumo pode demorar um pouco, tenha paciência.",
+    "Após o envio do link, a extração do texto pode demorar um pouco, tenha paciência.",
   );
+  const [title, setTitle] = useState<string>("Enviar o link");
+  const [buttonResumeVisible, setbuttonResumeVisible] = useState(false);
 
   async function handleVideoAdd() {
     // check if link has watch word in link
@@ -39,23 +41,35 @@ export function Home() {
 
     setVideo(newVideo);
     setMessage("Baixando o áudio do vídeo...");
+    setTitle("Link enviado");
 
     const transcription = await api.get("/summary/" + linkVideoID);
 
-    setMessage(
-      `Aguarde alguns segundos estamos resumindo este texto.. \n ${transcription.data.result}`,
-    );
+    setMessage(transcription.data.result);
 
-    setTimeout(async () => {
-      setMessage("Realizando o resumo. Aguarde...");
+    try {
+      // setMessage("Realizando o resumo. Aguarde...");
+      setbuttonResumeVisible(true);
+      setTitle("Deseja resumir o texto?");
+      // const summary = await api.post("/summary", {
+      //   text: transcription.data.result,
+      // });
 
-      const summary = await api.post("/summary", {
-        text: transcription.data.result,
-      });
-
-      setMessage(summary.data.result);
+      setMessage(transcription.data.result);
       setNewVideo("");
-    }, 10000);
+    } catch (error) {
+      Alert.alert(
+        "Servidor Ocupado",
+        "Desculpe-nos pelo inconveniente estamos sobrecarregados tente mais tarde.",
+      );
+    }
+  }
+
+  function handleResumeText() {
+    console.log("Tapped resume text..");
+
+    setTitle("Resumindo o texto aguarde...");
+    setbuttonResumeVisible(false);
   }
 
   return (
@@ -85,7 +99,26 @@ export function Home() {
       </View>
 
       <View style={styles.subHeader}>
-        <Text style={styles.titleResume}>Resumo</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginVertical: 15,
+          }}>
+          <Text style={styles.titleResume}>{title}</Text>
+
+          {buttonResumeVisible && (
+            <TouchableOpacity
+              style={styles.buttonResume}
+              onPress={handleResumeText}>
+              <Image
+                source={iconPlus}
+                style={styles.textButtonResume}
+                tintColor={theme.colors["text-primary"]}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
 
         <TextInput style={styles.resultText} multiline editable={false}>
           {message}
