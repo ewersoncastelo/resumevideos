@@ -11,16 +11,17 @@ import { styles } from "./styles";
 import logo from "../../assets/logo-resumevideos.png";
 import iconPlus from "../../assets/icon-plus.png";
 import theme from "../../global/theme";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import api from "../../services/api";
 
 export function Home() {
   const [_, setVideo] = useState<string>();
   const [newVideo, setNewVideo] = useState<string>("");
   const [message, setMessage] = useState<string>(
-    "O resumo pode demorar um pouco, tenha paciência.",
+    "Após enviar o link, o resumo pode demorar um pouco, tenha paciência.",
   );
 
-  function handleVideoAdd() {
+  async function handleVideoAdd() {
     // check if link has watch word in link
     if (!newVideo.includes("watch") && !newVideo.includes("shorts")) {
       setMessage(
@@ -34,12 +35,18 @@ export function Home() {
 
     // get the video id
     const [_, params] = newVideo.split("/watch");
-    const [linkVideoID] = params.split("?si");
+    const [link, linkVideoID] = params.split("?v=");
 
-    console.log("O Link parece ser válido...", linkVideoID);
+    console.log("Conferindo params:" + params);
+    console.log("Conferindo linkID:" + linkVideoID);
 
     setVideo(newVideo);
-    setMessage("Obtendo o texto do vídeo.");
+    setMessage("Baixando o áudio do vídeo...");
+
+    const transcription = await api.get("/summary/" + linkVideoID);
+
+    setMessage(transcription.data.result);
+    setNewVideo("");
   }
 
   return (
@@ -71,7 +78,7 @@ export function Home() {
       <View style={styles.subHeader}>
         <Text style={styles.titleResume}>Resumo</Text>
 
-        <Text style={styles.resultText}>{message} Aguarde...</Text>
+        <Text style={styles.resultText}>{message}</Text>
       </View>
     </View>
   );
