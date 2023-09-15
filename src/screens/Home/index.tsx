@@ -24,9 +24,6 @@ export function Home() {
   async function handleVideoAdd() {
     // check if link has watch word in link
     if (!newVideo.includes("watch") && !newVideo.includes("shorts")) {
-      setMessage(
-        "Atenção este link não parecer ser um link do Youtube válido.",
-      );
       return Alert.alert(
         "Adicionar Link",
         "Este video NÃO parecer ser um link do Youtube válido",
@@ -45,14 +42,20 @@ export function Home() {
 
     const transcription = await api.get("/summary/" + linkVideoID);
 
-    setMessage("Realizando o resumo. Aguarde...");
+    setMessage(
+      `Aguarde alguns segundos estamos resumindo este texto.. \n ${transcription.data.result}`,
+    );
 
-    const summary = await api.post("/summary", {
-      text: transcription.data.result,
-    });
+    setTimeout(async () => {
+      setMessage("Realizando o resumo. Aguarde...");
 
-    setMessage(summary.data.result);
-    setNewVideo("");
+      const summary = await api.post("/summary", {
+        text: transcription.data.result,
+      });
+
+      setMessage(summary.data.result);
+      setNewVideo("");
+    }, 10000);
   }
 
   return (
@@ -84,7 +87,9 @@ export function Home() {
       <View style={styles.subHeader}>
         <Text style={styles.titleResume}>Resumo</Text>
 
-        <Text style={styles.resultText}>{message}</Text>
+        <TextInput style={styles.resultText} multiline editable={false}>
+          {message}
+        </TextInput>
       </View>
     </View>
   );
