@@ -11,7 +11,7 @@ import { styles } from "./styles";
 import logo from "../../assets/logo-resumevideos.png";
 import iconPlus from "../../assets/icon-plus.png";
 import theme from "../../global/theme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../../services/api";
 
 export function Home() {
@@ -40,23 +40,52 @@ export function Home() {
     console.log("Conferindo linkID:" + linkVideoID);
 
     setVideo(newVideo);
-    setMessage("Baixando o áudio do vídeo...");
+    setMessage("Obtendo o texto do video..");
     setTitle("Link enviado");
 
     const transcription = await api.get("/summary/" + linkVideoID);
 
     setMessage(transcription.data.result);
+    setbuttonResumeVisible(true);
+    setTitle("Deseja resumir o texto?");
 
+    // try {
+    //   setbuttonResumeVisible(true);
+    //   setTitle("Deseja resumir o texto?");
+
+    //   setMessage("Realizando o resumo. Aguarde...");
+    //   const summary = await api.post("/summary", {
+    //     text: transcription.data.result,
+    //   });
+
+    //   setMessage(transcription.data.result);
+    //   setNewVideo("");
+    // } catch (error) {
+    //   Alert.alert(
+    //     "Servidor Ocupado",
+    //     "Desculpe-nos pelo inconveniente estamos sobrecarregados tente mais tarde.",
+    //   );
+    // }
+  }
+
+  async function handleResumeText() {
     try {
-      // setMessage("Realizando o resumo. Aguarde...");
-      setbuttonResumeVisible(true);
-      setTitle("Deseja resumir o texto?");
-      // const summary = await api.post("/summary", {
-      //   text: transcription.data.result,
-      // });
+      setbuttonResumeVisible(false);
+      setTitle("Estamos resumindo o texto, seja paciente!");
 
-      setMessage(transcription.data.result);
+      // console.log("Isso é o que tem dentro de: ", message);
+
+      // setMessage("Realizando o resumo. Aguarde...");
+      const summary = await api.post("/summary", {
+        text: message,
+      });
+
+      // console.log("Isso é o que tem dentro de: ", summary);
+
+      setMessage(summary.data.result);
+      setTitle("Resumo finalizado");
       setNewVideo("");
+      setbuttonResumeVisible(false);
     } catch (error) {
       Alert.alert(
         "Servidor Ocupado",
@@ -65,12 +94,9 @@ export function Home() {
     }
   }
 
-  function handleResumeText() {
-    console.log("Tapped resume text..");
-
-    setTitle("Resumindo o texto aguarde...");
+  useEffect(() => {
     setbuttonResumeVisible(false);
-  }
+  }, []);
 
   return (
     <View style={styles.container}>
